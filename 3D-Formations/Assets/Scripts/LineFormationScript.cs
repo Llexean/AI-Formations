@@ -5,7 +5,7 @@ using UnityEngine;
 public class LineFormationScript : MonoBehaviour
 {
     private float offsetToFront = 2f;
-    private float offsetToSide = 5f;
+    private float offsetToSide = 2f;
     public void CreateFormation(List<ConnectToMaster> drones)
     {
         int currentAmountOfDrones = drones.Count;

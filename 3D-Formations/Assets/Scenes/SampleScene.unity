@@ -941,10 +941,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2351695271317097696, guid: 30b9eaa7d9ccd5c4cbb76a37d0888454, type: 3}
-      propertyPath: maxAmountOfDrones
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 6885624368010382407, guid: 30b9eaa7d9ccd5c4cbb76a37d0888454, type: 3}
       propertyPath: cam
       value: 

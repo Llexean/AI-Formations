@@ -20,22 +20,36 @@ public class ChildDronesManagement : MonoBehaviour
         set { currentChildDronePositions = value; }
     }
 
+    private float elapsedSec = 0f;
+    private float changeModeCooldown = 2f;
+
     ///
     /// FORMATIONS
     ///
     LineFormationScript lineFormation = null;
     WheelFormationScript wheelFormation = null;
     RingFormationScript ringFormation = null;
+    BoreFormationScript boreFormation = null;
     enum FormationType
     {
         Line,
         Wheel,
-        Ring
+        Ring,
+        Bore,
+        overflow
     }
 
-    FormationType currentFormation = FormationType.Wheel;
+    FormationType currentFormation = FormationType.Line;
     public void Start()
     {
+        if(maxAmountOfDrones > 10)
+        {
+            maxAmountOfDrones = 10;
+        }
+        else if(maxAmountOfDrones < 1)
+        {
+            maxAmountOfDrones = 1;
+        }
         currentAmountOfDrones = maxAmountOfDrones;
         currentChildDronePositions = new List<Vector3>();
         ChildDronesManagement CDM = gameObject.GetComponent<ChildDronesManagement>();
@@ -57,24 +71,34 @@ public class ChildDronesManagement : MonoBehaviour
         lineFormation = GetComponent<LineFormationScript>();
         wheelFormation = GetComponent<WheelFormationScript>();
         ringFormation = GetComponent<RingFormationScript>();
+        boreFormation = GetComponent<BoreFormationScript>();
 
-        CreateFormation();
+        CreateFormation(0f);
     }
 
     private void Update()
     {
+        elapsedSec += Time.deltaTime;
         if(Input.GetAxisRaw("ChangeFormation") > 0.2f)
         {
-            ChangeFormation();
+            ChangeFormation(Time.deltaTime);
         }
+        CreateFormation(Time.deltaTime);
     }
 
-    private void ChangeFormation()
+    private void ChangeFormation(float deltaT)
     {
-        //currentFormation++;
-        CreateFormation();
+        if(elapsedSec > changeModeCooldown)
+        {
+            elapsedSec = 0f;
+            currentFormation++;
+            if(currentFormation == FormationType.overflow)
+            {
+                currentFormation = FormationType.Line;
+            }
+        }
     }
-    private void CreateFormation()
+    private void CreateFormation(float deltaT)
     {
         switch(currentFormation)
         {
@@ -82,10 +106,15 @@ public class ChildDronesManagement : MonoBehaviour
                 lineFormation.CreateFormation(childDronesConnectComponent);
                 break;
             case FormationType.Wheel:
-                wheelFormation.CreateFormation(childDronesConnectComponent);
+                wheelFormation.CreateFormation(childDronesConnectComponent, deltaT);
                 break;
             case FormationType.Ring:
                 ringFormation.CreateFormation(childDronesConnectComponent);
+                break;
+            case FormationType.Bore:
+                boreFormation.CreateFormation(childDronesConnectComponent, deltaT);
+                break;
+            default:
                 break;
         }
     }
