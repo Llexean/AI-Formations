@@ -121,6 +121,8 @@ Bore formation, being the most difficult formation is again based on the amount 
 
 **Bore With Four**
 
+<img src="https://github.com/Llexean/AI-Formations/blob/main/Gif's/BoreFormationWithFour.gif" alt="BoreWithFour" width="600"/>
+
 If more are activated your outcome will be calculated differently. 1 in the front, 3 behind that one and the rest between the ship in the 3 spinning in the opposite direction.
 ```cs
             Vector3 newPos = Vector3.zero;
